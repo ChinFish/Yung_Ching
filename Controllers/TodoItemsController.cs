@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using WebApplication1.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -46,8 +47,32 @@ namespace WebApplication1.Controllers
 
         // PUT api/<TodoItemsController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public ActionResult Put (Guid id, [FromBody] TodoItem value)
         {
+            if (id != value.Id)
+            {
+                return BadRequest();
+            }
+
+            _todoContext.Entry(value).State = EntityState.Modified;
+
+            try
+            {
+                _todoContext.SaveChanges();
+            }
+            catch(DbUpdateException) 
+            {
+                if (_todoContext.TodoItems.Any(e => e.Id == id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    return StatusCode(500, "Access Error!");
+                }
+            }
+            return NoContent(); 
+
         }
 
         // DELETE api/<TodoItemsController>/5
