@@ -77,8 +77,16 @@ namespace WebApplication1.Controllers
 
         // DELETE api/<TodoItemsController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public ActionResult Delete(Guid id, [FromBody] TodoItem value)
         {
+            var delete = _todoContext.TodoItems.Find(id);
+            if(delete==null)
+            {
+                return NotFound();
+            }
+            _todoContext.TodoItems.Remove(delete);
+            _todoContext.SaveChanges();
+            return NoContent();
         }
     }
 }
