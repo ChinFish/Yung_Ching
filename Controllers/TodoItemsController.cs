@@ -23,15 +23,25 @@ namespace WebApplication1.Controllers
 
         // GET api/<TodoItemsController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public ActionResult<TodoItem> Get(Guid id)
         {
-            return "value";
+            var result = _todoContext.TodoItems.Find(id);
+            if (result == null)
+            {
+                return NotFound("Empty data");  
+            }    
+
+            return result;
         }
 
         // POST api/<TodoItemsController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public ActionResult<TodoItem> Post([FromBody] TodoItem value) 
         {
+            _todoContext.TodoItems.Add(value);
+            _todoContext.SaveChanges();
+
+            return CreatedAtAction(nameof(Get), new { id = value.Id }, value);
         }
 
         // PUT api/<TodoItemsController>/5
