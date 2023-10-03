@@ -4,8 +4,7 @@ using WebApplication1.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
+//Connect database according connect string
 builder.Services.AddDbContext<TodoContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("TodoDatabase")));
 
 builder.Services.AddControllers();

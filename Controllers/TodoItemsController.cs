@@ -10,19 +10,22 @@ namespace WebApplication1.Controllers
     [ApiController]
     public class TodoItemsController : ControllerBase
     {
-        private readonly TodoContext _todoContext;  
+        private readonly TodoContext _todoContext;
+        //Constructor
         public TodoItemsController(TodoContext todoContext) 
-        { 
-            _todoContext = todoContext;   
+        {
+        //Get data from database
+            _todoContext = todoContext;
         }
-        // GET: api/<TodoItemsController>
+
         [HttpGet]
+        //Implement Get all data
         public ActionResult<IEnumerable<TodoItem>> Get()
         {
             return _todoContext.TodoItems;
         }
 
-        // GET api/<TodoItemsController>/5
+        //Implement get data from certain ID
         [HttpGet("{id}")]
         public ActionResult<TodoItem> Get(Guid id)
         {
@@ -45,10 +48,11 @@ namespace WebApplication1.Controllers
             return CreatedAtAction(nameof(Get), new { id = value.Id }, value);
         }
 
-        // PUT api/<TodoItemsController>/5
+        // PUT api/<TodoItemsController>/id
         [HttpPut("{id}")]
         public ActionResult Put (Guid id, [FromBody] TodoItem value)
         {
+            //Check if search id is not match
             if (id != value.Id)
             {
                 return BadRequest();
@@ -56,11 +60,12 @@ namespace WebApplication1.Controllers
 
             _todoContext.Entry(value).State = EntityState.Modified;
 
+            //Avoid modified failed
             try
             {
                 _todoContext.SaveChanges();
             }
-            catch(DbUpdateException) 
+            catch(DbUpdateException)
             {
                 if (_todoContext.TodoItems.Any(e => e.Id == id))
                 {
