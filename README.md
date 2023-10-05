@@ -8,7 +8,7 @@ Database利用自建的LocalDB，
 
 Create : 1.新增一筆data
 
-Read : 1.取得所有DB資料 2.利用ID尋找某筆資料
+Read : 1.取得所有DB資料 2.利用ID尋找某筆資料 3.取出在資料庫中符合給定姓名的所有值
 
 Update : 1.更改某個ID的資料
 
