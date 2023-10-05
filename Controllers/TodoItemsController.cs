@@ -18,11 +18,13 @@ namespace WebApplication1.Controllers
             _todoContext = todoContext;
         }
 
-        [HttpGet]
-        //Implement Get all data
-        public ActionResult<IEnumerable<TodoItem>> Get()
+        [HttpGet()]
+        public IEnumerable<TodoItem> Get()
         {
-            return _todoContext.TodoItems;
+            var result = _todoContext.TodoItems;
+
+            //return _todoContext.TodoItems;
+            return result;
         }
 
         //Implement get data from certain ID
@@ -34,6 +36,15 @@ namespace WebApplication1.Controllers
             {
                 return NotFound("Empty data");  
             }    
+
+            return result;
+        }
+
+        //Implement search certain name, return all of correct result
+        [HttpGet("Name={Name}")]
+        public IEnumerable<TodoItem> Get(string name)
+        {
+            var result = _todoContext.TodoItems.Where(a => a.Name == name);
 
             return result;
         }
@@ -80,7 +91,7 @@ namespace WebApplication1.Controllers
 
         }
 
-        // DELETE api/<TodoItemsController>/5
+        // DELETE api/<TodoItemsController>/id
         [HttpDelete("{id}")]
         public ActionResult Delete(Guid id, [FromBody] TodoItem value)
         {
